@@ -13,7 +13,12 @@ export default function App() {
   return (
     <>
       <ThemeContext.Provider value={darkTheme}>
-        <button onClick={toggleTheme}>Toggle Theme</button>
+        <button
+          onClick={toggleTheme}
+          className="p-4 border border-blue-600 font-bold"
+        >
+          Toggle Theme
+        </button>
         <FunctionContextComponent />
         <ClassContextComponent />
       </ThemeContext.Provider>
