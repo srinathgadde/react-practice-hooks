@@ -1,30 +1,45 @@
-// -------------------------------- useContext -------------------------------------------------------------s
-import React, { useState, useContext } from "react";
-import ClassContextComponent from "./ClassContextComponent";
+// -------------------------------- useContext another way -------------------------------------------------------------s
+import React from "react";
 import FunctionContextComponent from "./FunctionContextComponent";
-export const ThemeContext = React.createContext();
+import { ThemeProvider } from "./ThemeContext";
 
 export default function App() {
-  const [darkTheme, setDarkTheme] = useState(true);
-
-  function toggleTheme() {
-    setDarkTheme((prevDarkTheme) => !prevDarkTheme);
-  }
   return (
-    <>
-      <ThemeContext.Provider value={darkTheme}>
-        <button
-          onClick={toggleTheme}
-          className="p-4 border border-blue-600 font-bold"
-        >
-          Toggle Theme
-        </button>
-        <FunctionContextComponent />
-        <ClassContextComponent />
-      </ThemeContext.Provider>
-    </>
+    <ThemeProvider>
+      <FunctionContextComponent />
+    </ThemeProvider>
   );
 }
+
+// // -------------------------------- useContext -------------------------------------------------------------s
+// import React, { useState, useContext } from "react";
+// import ClassContextComponent from "./ClassContextComponent";
+// import FunctionContextComponent from "./FunctionContextComponent";
+
+// // creating the context
+// export const ThemeContext = React.createContext();
+
+// export default function App() {
+//   const [darkTheme, setDarkTheme] = useState(true);
+
+//   function toggleTheme() {
+//     setDarkTheme((prevDarkTheme) => !prevDarkTheme);
+//   }
+//   return (
+//     <>
+//       <ThemeContext.Provider value={darkTheme}>
+//         <button
+//           onClick={toggleTheme}
+//           className="p-4 border border-blue-600 font-bold"
+//         >
+//           Toggle Theme
+//         </button>
+//         <FunctionContextComponent />
+//         <ClassContextComponent />
+//       </ThemeContext.Provider>
+//     </>
+//   );
+// }
 // -------------------------------- useEffect ---------------------------------------------------------------
 
 // import { useState, useEffect } from "react";
