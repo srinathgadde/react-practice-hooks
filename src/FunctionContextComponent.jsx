@@ -12,7 +12,9 @@ export default function FunctionContextComponent() {
   };
   return (
     <>
-      <button onClick={toggleTheme}>Toggle Theme</button>
+      <button className="p-4 border border-blue-600 " onClick={toggleTheme}>
+        Toggle Theme
+      </button>
       <div style={themeStyles}>Function Theme</div>
     </>
   );
