@@ -1,5 +1,5 @@
 // -------------------------------------- useMemo -------------------------------------------------------
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 export default function App() {
   const [number, setNumber] = useState(0);
@@ -9,10 +9,18 @@ export default function App() {
     return slowFunction(number);
   }, [number]);
 
-  const themeStyles = {
-    backgroundColor: dark ? "black" : "white",
-    color: dark ? "white" : "black",
-  };
+  const themeStyles = useMemo(() => {
+    return {
+      backgroundColor: dark ? "black" : "white",
+      color: dark ? "white" : "black",
+    };
+  }, [dark]);
+
+  useEffect(() => {
+    console.log("Theme changed");
+  }, [themeStyles]);
+  // but this will be printed even when we change the number, because when the component rendered again, themeStyles values is same but reference is different
+  // so for the reference equality, we use use Memo
 
   return (
     <>
