@@ -1,17 +1,67 @@
-// -------------------------------- useContext another way -------------------------------------------------------------s
-import React from "react";
-import FunctionContextComponent from "./FunctionContextComponent";
-import { ThemeProvider } from "./ThemeContext";
+// ------------------------------- useRef ----------------------------------------------------------------------------
+import React, { useEffect, useState, useRef } from "react";
 
 export default function App() {
+  const [name, setName] = useState("");
+  // const [renderCount, setRenderCount] = useState(0);
+  // useEffect(() => {
+  //   // setRenderCount((prevRenderCount) => prevRenderCount + 1); this will create an infinite loop
+  // });
+
+  // const renderCount = useRef(1);
+  // returns an object like {current:1}
+
+  // useEffect(() => {
+  //   renderCount.current = renderCount.current + 1;
+  // });
+
+  // const inputRef = useRef();
+
+  // function focus() {
+  //   inputRef.current.focus();
+  //   // inputRef.current.value = "some value"; // we shouldn't do this in react, everything in react should be updated through states.. it's a good practice
+  // }
+
+  const prevName = useRef("");
+
+  useEffect(() => {
+    prevName.current = name;
+  }, [name]);
   return (
-    <ThemeProvider>
-      <FunctionContextComponent />
-    </ThemeProvider>
+    <>
+      <input
+        // ref={inputRef}
+        className="p-4 border border-blue-500"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <div>
+        My name is {name} <br />
+        previously it was {prevName.current}
+      </div>
+      {/* <div>I rendered {renderCount.current} times</div> */}
+
+      {/* <button onClick={focus} className="p-4 border border-blue-500">
+        Focus
+      </button> */}
+    </>
   );
 }
 
-// // -------------------------------- useContext -------------------------------------------------------------s
+// -------------------------------- useContext another way -------------------------------------------------------------
+// import React from "react";
+// import FunctionContextComponent from "./FunctionContextComponent";
+// import { ThemeProvider } from "./ThemeContext";
+
+// export default function App() {
+//   return (
+//     <ThemeProvider>
+//       <FunctionContextComponent />
+//     </ThemeProvider>
+//   );
+// }
+
+// // -------------------------------- useContext -------------------------------------------------------------
 // import React, { useState, useContext } from "react";
 // import ClassContextComponent from "./ClassContextComponent";
 // import FunctionContextComponent from "./FunctionContextComponent";
