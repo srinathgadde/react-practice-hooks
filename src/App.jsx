@@ -1,52 +1,130 @@
-// ------------------------------- useRef ----------------------------------------------------------------------------
-import React, { useEffect, useState, useRef } from "react";
+// -------------------------------------- useMemo -------------------------------------------------------
+import React, { useMemo, useState } from "react";
 
 export default function App() {
-  const [name, setName] = useState("");
-  // const [renderCount, setRenderCount] = useState(0);
-  // useEffect(() => {
-  //   // setRenderCount((prevRenderCount) => prevRenderCount + 1); this will create an infinite loop
-  // });
+  const [number, setNumber] = useState(0);
+  const [dark, setDark] = useState(false);
 
-  // const renderCount = useRef(1);
-  // returns an object like {current:1}
+  const doubleNumber = useMemo(() => {
+    return slowFunction(number);
+  }, [number]);
 
-  // useEffect(() => {
-  //   renderCount.current = renderCount.current + 1;
-  // });
+  const themeStyles = {
+    backgroundColor: dark ? "black" : "white",
+    color: dark ? "white" : "black",
+  };
 
-  // const inputRef = useRef();
-
-  // function focus() {
-  //   inputRef.current.focus();
-  //   // inputRef.current.value = "some value"; // we shouldn't do this in react, everything in react should be updated through states.. it's a good practice
-  // }
-
-  const prevName = useRef("");
-
-  useEffect(() => {
-    prevName.current = name;
-  }, [name]);
   return (
     <>
       <input
-        // ref={inputRef}
-        className="p-4 border border-blue-500"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        className="border border-black"
+        type="number"
+        value={number}
+        onChange={(e) => {
+          setNumber(parseInt(e.target.value));
+        }}
       />
-      <div>
-        My name is {name} <br />
-        previously it was {prevName.current}
-      </div>
-      {/* <div>I rendered {renderCount.current} times</div> */}
-
-      {/* <button onClick={focus} className="p-4 border border-blue-500">
-        Focus
-      </button> */}
+      <button
+        className="border border-black"
+        onClick={() => setDark((prevDark) => !prevDark)}
+      >
+        Change theme
+      </button>
+      <div style={themeStyles}>{doubleNumber}</div>
+      {/* this function will be called/rendered whenever there is a change in the component. so to solve this, we use the hook 'useMemo'.. Memo= Memoization */}
     </>
   );
 }
+
+function slowFunction(num) {
+  // console.log("Calling Slow function");
+  for (let i = 0; i < 1000000000; i++) {}
+  return num * 2;
+}
+
+// --------------------------------------- useCallback -----------------------------------------------------------------
+
+// import React, { useState } from "react";
+// import List from "./List";
+
+// export default function App() {
+//   const [number, setNumber] = useState(1);
+//   const [dark, setDark] = useState(false);
+
+//   const getItems = () => {
+//     return [number, number + 1, number + 2];
+//   };
+//   const theme = {
+//     backgroundColor: dark ? "#333" : "#FFF",
+//     color: dark ? "#FFF" : "#333",
+//   };
+//   return (
+//     <>
+//       <div style={theme}>
+//         <input
+//           type="number"
+//           className="border border-black"
+//           value={number}
+//           onChange={(e) => setNumber(parseInt(e.target.value))}
+//         />
+//         <button onClick={() => setDark((prevDark) => !prevDark)}>
+//           Toggle theme
+//         </button>
+//         <List getItems={getItems} />
+//       </div>
+//     </>
+//   );
+// }
+
+//  ------------------------------- useRef ----------------------------------------------------------------------------
+// import React, { useEffect, useState, useRef } from "react";
+
+// export default function App() {
+//   const [name, setName] = useState("");
+//   // const [renderCount, setRenderCount] = useState(0);
+//   // useEffect(() => {
+//   //   // setRenderCount((prevRenderCount) => prevRenderCount + 1); this will create an infinite loop
+//   // });
+
+//   // const renderCount = useRef(1);
+//   // returns an object like {current:1}
+
+//   // useEffect(() => {
+//   //   renderCount.current = renderCount.current + 1;
+//   // });
+
+//   // const inputRef = useRef();
+
+//   // function focus() {
+//   //   inputRef.current.focus();
+//   //   // inputRef.current.value = "some value"; // we shouldn't do this in react, everything in react should be updated through states.. it's a good practice
+//   // }
+
+//   const prevName = useRef("");
+
+//   useEffect(() => {
+//     prevName.current = name;
+//   }, [name]);
+//   return (
+//     <>
+//       <input
+//         // ref={inputRef}
+//         className="p-4 border border-blue-500"
+//         value={name}
+//         onChange={(e) => setName(e.target.value)}
+//       />
+//       <div>
+//         My name is {name} <br />
+//         previously it was {prevName.current}
+//       </div>
+//       {/* <div>I rendered {renderCount.current} times</div> */}
+
+//       {/* <button onClick={focus} className="p-4 border border-blue-500">
+//         Focus
+//       </button> */}
+//     </>
+//   );
+// }
 
 // -------------------------------- useContext another way -------------------------------------------------------------
 // import React from "react";
@@ -61,7 +139,7 @@ export default function App() {
 //   );
 // }
 
-// // -------------------------------- useContext -------------------------------------------------------------
+// -------------------------------- useContext -------------------------------------------------------------
 // import React, { useState, useContext } from "react";
 // import ClassContextComponent from "./ClassContextComponent";
 // import FunctionContextComponent from "./FunctionContextComponent";
@@ -90,6 +168,7 @@ export default function App() {
 //     </>
 //   );
 // }
+
 // -------------------------------- useEffect ---------------------------------------------------------------
 
 // import { useState, useEffect } from "react";
