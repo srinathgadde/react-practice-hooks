@@ -1,87 +1,93 @@
-// -------------------------------------- useMemo -------------------------------------------------------
-import React, { useEffect, useMemo, useState } from "react";
+// --------------------------------------- useCallback -----------------------------------------------------------------
+
+import React, { useCallback, useState } from "react";
+import List from "./List";
 
 export default function App() {
-  const [number, setNumber] = useState(0);
+  const [number, setNumber] = useState(1);
   const [dark, setDark] = useState(false);
 
-  const doubleNumber = useMemo(() => {
-    return slowFunction(number);
+  const getItems = useCallback(() => {
+    return [number, number + 1, number + 2];
   }, [number]);
 
-  const themeStyles = useMemo(() => {
-    return {
-      backgroundColor: dark ? "black" : "white",
-      color: dark ? "white" : "black",
-    };
-  }, [dark]);
-
-  useEffect(() => {
-    console.log("Theme changed");
-  }, [themeStyles]);
-  // but this will be printed even when we change the number, because when the component rendered again, themeStyles values is same but reference is different
-  // so for the reference equality, we use use Memo
-
+  // as it seems very similar to useMemo, there is one big difference..
+  // in the case of useMemo, getItems would be just set to the array there, but
+  // useCallback: getItems will set to that entire function, not just the return value of that function
+  // which allow us to use this function later on in our application, ex: getItems()
+  const theme = {
+    backgroundColor: dark ? "#333" : "#FFF",
+    color: dark ? "#FFF" : "#333",
+  };
   return (
     <>
-      <input
-        className="border border-black"
-        type="number"
-        value={number}
-        onChange={(e) => {
-          setNumber(parseInt(e.target.value));
-        }}
-      />
-      <button
-        className="border border-black"
-        onClick={() => setDark((prevDark) => !prevDark)}
-      >
-        Change theme
-      </button>
-      <div style={themeStyles}>{doubleNumber}</div>
-      {/* this function will be called/rendered whenever there is a change in the component. so to solve this, we use the hook 'useMemo'.. Memo= Memoization */}
+      <div style={theme}>
+        <input
+          type="number"
+          className="border border-black"
+          value={number}
+          onChange={(e) => setNumber(parseInt(e.target.value))}
+        />
+        <button onClick={() => setDark((prevDark) => !prevDark)}>
+          Toggle theme
+        </button>
+        <List getItems={getItems} />
+      </div>
     </>
   );
 }
 
-function slowFunction(num) {
-  // console.log("Calling Slow function");
-  for (let i = 0; i < 1000000000; i++) {}
-  return num * 2;
-}
-
-// --------------------------------------- useCallback -----------------------------------------------------------------
-
-// import React, { useState } from "react";
-// import List from "./List";
+// -------------------------------------- useMemo -------------------------------------------------------
+// import React, { useEffect, useMemo, useState } from "react";
 
 // export default function App() {
-//   const [number, setNumber] = useState(1);
+//   const [number, setNumber] = useState(0);
 //   const [dark, setDark] = useState(false);
 
-//   const getItems = () => {
-//     return [number, number + 1, number + 2];
-//   };
-//   const theme = {
-//     backgroundColor: dark ? "#333" : "#FFF",
-//     color: dark ? "#FFF" : "#333",
-//   };
+//   const doubleNumber = useMemo(() => {
+//     return slowFunction(number);
+//   }, [number]);
+
+//   const themeStyles = useMemo(() => {
+//     return {
+//       backgroundColor: dark ? "black" : "white",
+//       color: dark ? "white" : "black",
+//     };
+//   }, [dark]);
+
+//   useEffect(() => {
+//     console.log("Theme changed");
+//   }, [themeStyles]);
+
+//   // but this will be printed even when we change the number, because when the component rendered again, themeStyles values is same but reference is different
+//   // so for the reference equality, we use use Memo
+
 //   return (
 //     <>
-//       <div style={theme}>
-//         <input
-//           type="number"
-//           className="border border-black"
-//           value={number}
-//           onChange={(e) => setNumber(parseInt(e.target.value))}
-//         />
-//         <button onClick={() => setDark((prevDark) => !prevDark)}>
-//           Toggle theme
-//         </button>
-//         <List getItems={getItems} />
-//       </div>
+//       <input
+//         className="border border-black"
+//         type="number"
+//         value={number}
+//         onChange={(e) => {
+//           setNumber(parseInt(e.target.value));
+//         }}
+//       />
+//       <button
+//         className="border border-black"
+//         onClick={() => setDark((prevDark) => !prevDark)}
+//       >
+//         Change theme
+//       </button>
+//       <div style={themeStyles}>{doubleNumber}</div>
+//       {/* this function will be called/rendered whenever there is a change in the component. so to solve this, we use the hook 'useMemo'.. Memo= Memoization */}
 //     </>
 //   );
+// }
+
+// function slowFunction(num) {
+//   // console.log("Calling Slow function");
+//   for (let i = 0; i < 1000000000; i++) {}
+//   return num * 2;
 // }
 
 //  ------------------------------- useRef ----------------------------------------------------------------------------
