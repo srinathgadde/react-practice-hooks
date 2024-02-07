@@ -1,41 +1,63 @@
-// --------------------------------------- useCallback -----------------------------------------------------------------
+// --------------------------------------- custom Hooks ----------------------------------------------------------
 
-import React, { useCallback, useState } from "react";
-import List from "./List";
+import React from "react";
+import useLocalStorage from "./useLocalStorage";
+import useUpdateLogger from "./useUpdateLogger";
 
 export default function App() {
-  const [number, setNumber] = useState(1);
-  const [dark, setDark] = useState(false);
+  const [name, setName] = useLocalStorage("name", ""); //custom hook
+  useUpdateLogger(name); //another custom hook
 
-  const getItems = useCallback(() => {
-    return [number, number + 1, number + 2];
-  }, [number]);
-
-  // as it seems very similar to useMemo, there is one big difference..
-  // in the case of useMemo, getItems would be just set to the array there, but
-  // useCallback: getItems will set to that entire function, not just the return value of that function
-  // which allow us to use this function later on in our application, ex: getItems()
-  const theme = {
-    backgroundColor: dark ? "#333" : "#FFF",
-    color: dark ? "#FFF" : "#333",
-  };
   return (
     <>
-      <div style={theme}>
-        <input
-          type="number"
-          className="border border-black"
-          value={number}
-          onChange={(e) => setNumber(parseInt(e.target.value))}
-        />
-        <button onClick={() => setDark((prevDark) => !prevDark)}>
-          Toggle theme
-        </button>
-        <List getItems={getItems} />
-      </div>
+      <input
+        className="border border-black "
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
     </>
   );
 }
+
+// --------------------------------------- useCallback -----------------------------------------------------------------
+
+// import React, { useCallback, useState } from "react";
+// import List from "./List";
+
+// export default function App() {
+//   const [number, setNumber] = useState(1);
+//   const [dark, setDark] = useState(false);
+
+//   const getItems = useCallback(() => {
+//     return [number, number + 1, number + 2];
+//   }, [number]);
+
+//   // as it seems very similar to useMemo, there is one big difference..
+//   // in the case of useMemo, getItems would be just set to the array there, but
+//   // useCallback: getItems will set to that entire function, not just the return value of that function
+//   // which allow us to use this function later on in our application, ex: getItems()
+//   const theme = {
+//     backgroundColor: dark ? "#333" : "#FFF",
+//     color: dark ? "#FFF" : "#333",
+//   };
+//   return (
+//     <>
+//       <div style={theme}>
+//         <input
+//           type="number"
+//           className="border border-black"
+//           value={number}
+//           onChange={(e) => setNumber(parseInt(e.target.value))}
+//         />
+//         <button onClick={() => setDark((prevDark) => !prevDark)}>
+//           Toggle theme
+//         </button>
+//         <List getItems={getItems} />
+//       </div>
+//     </>
+//   );
+// }
 
 // -------------------------------------- useMemo -------------------------------------------------------
 // import React, { useEffect, useMemo, useState } from "react";
